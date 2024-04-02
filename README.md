@@ -70,7 +70,7 @@ The data for Home Assistant is obtained by API call, processed and used immediat
 
 **Forecast Solar** provide API calls to access PV forecasts. As a basic free-to-use plan, the simple forecast API is open and does not need any authorization. The calls do require precise location and orientation parameters.
 
-You can find out more about [Forecast Solar API Documentation](https://https://doc.forecast.solar/).
+You can find out more about [Forecast Solar API Documentation](https://doc.forecast.solar/).
 
 The API call I am currently using is:
 
@@ -86,7 +86,7 @@ Forecast Solar uses the PVGIS solar PV model, based on theoretical calculation a
 
 **The forecast for today will change during the day.** Changes will take place *at most* every 15 minutes, but more likely only every few hours. The current-day forecast will change *even for times that have now past*. For this reason, at each hourly update, this flow takes a copy of the recent hour figure and saves to history, before updating the full two-day hourly array. The total day forecast, as the sum of the full day, can therefore change hourly, and it is a matter of choice whether to use the latest full-day forecast, or to use the history records *up to* 'now' together with the remaining forecast *from* 'now'. This flow, by default, *uses the historic records of the forecast where they exist* so as to provide a more stable day-forecast figure.
 
-**The Forecast Solar site permits up to 12 API calls per hour on the 'free' account.** Each plane (for multiple planes) counts as one call. The hour appears to be 'rolling', but with an inherent overlap with regular hourly calls, a maximum of up to six planes can be accommodated. Additional calls (for testing etc.) can result in exceeding the call limit.
+**The Forecast Solar site permits up to 12 API calls per hour on the 'free' account.** Each plane (for multiple planes) counts as one call. The hour appears to be 'rolling', but with an inherent overlap with regular hourly calls, a maximum of up to *four* planes can be accommodated. Additional calls (for testing etc.) can result in exceeding the call limit.
 
 **API calls may fail**, however the data array will continue to hold the most recent forecast, and the flow will continue to collect and store the hourly actual production figures if required.
 
@@ -198,7 +198,7 @@ The flow should run without issue. Forecast Solar does have occasional maintenan
 
 ### When and how should I run the flow?
 
-The flow is setup to run every hour. More frequently is unnecessary, and the flow could be updated every two or three hours. The forecast does not change that often. Flow trigger here is using a standard inject node, to run hourly, and therefore it will use a cron expression and run at the top of the hour hh:00. To avoid running everything in my flows at the exact hour, and to avoid flooding the Forecast.solar API, I offset the run by using a 2 minute delay. Home Assistant runs the integration update hourly but randomly during each hour, and I would encourage you to be considerate to Forecast.solar in your use of this free service.
+The flow is setup to run every hour. More frequently is unnecessary, and the flow could be updated only every two or three hours. The forecast does not change that often. Flow trigger here is using a standard inject node, to run hourly, and therefore it will use a cron expression and run at the top of the hour hh:00. To avoid running everything in my flows at the exact hour, and to avoid flooding the Forecast.solar API, I offset the run by using a 2 minute delay. Home Assistant runs the integration update hourly but randomly during each hour, and I would encourage you to be considerate to Forecast.solar in your use of this free service.
 
 The flow maintains the context variables, adding a new 24 hour period and moving the data at the start of each new day. Where there is a longer period between 'today' and the stored dates, or where the array does not exist, a new blank array will be created. In cases of corrupt data simply delete the context variable and a new blank variable will be created at the next hourly API call.
 
@@ -233,7 +233,7 @@ The Forecast.solar API returns, for each hour, a power and a Watt-hour (energy) 
 
 The power figure given is the forecasted instantaneous power in Watts at the precise hour. As a continuous variable, power can be plotted on a time graph as a line.
 
-The energy figures have to be calculated over a period of time, which is usually one-hour period. From a simple power graph, we can estimate the energy by taking the average power (between two consecutive hourly figures). Since we are working over a one hour period, the average power value over the hour is numerically equivalent to the energy Watt-hour (Wh) value.
+The energy figures have to be calculated over a period of time, which is usually a one-hour period. From a simple power graph, we can estimate the energy by taking the average power (between two consecutive hourly figures). Since we are working over a one hour period, the average power value over the hour is numerically equivalent to the energy Watt-hour (Wh) value.
 
 ![Power or energy?](/images/Power-or-energy.png)
 
@@ -269,7 +269,7 @@ The context store read and writes are all performed in Change nodes. This facili
 
 #### SolarFC
 
-The Solar Forecast object, holds an array with 72 hourly records for yesterday, today, and tomorrow with fields for:
+The Solar Forecast object which holds an array with 72 hourly records for yesterday, today, and tomorrow with fields for:
 
 - the main array, with forecast, forecast history, forecast energy, and actual energy (Watts) for each hour
 - the dates used, timezone offset, and last update timestamp
@@ -296,7 +296,7 @@ Holds an object for today, and for tomorrow, each with fields for:
 
 This object is updated on successful API update.
 
-**Note** that the forecast energy in this variable is calculated from the history-forecast maintained in the solar table. This will be slightly different to the API total day energy forecast, and will change less during the day.
+**Note** that the forecast energy in this variable is calculated from the history-forecast maintained in the solar table. This will be slightly different to the API total day energy forecast, and will typically change by less during the day.
 
 **The power table** is regenerated at each API update, and contains time period details for given intervals of forecast power. The flow uses parameters to create an array at, for example, set 100 Watt intervals (from 0 to 4000). Then, the forecast is analyzed and for each power level, the corresponding period of time at that power is calculated by interpolation.
 
@@ -593,7 +593,7 @@ It is a *forecast*, and you should only expect an accurate forecast and a good m
 
 After that, weather happens. Solar generation is roughly 15% of system peak from diffuse light, and 85% from direct incident sunlight. Particles and moisture in the atmosphere reduce, and dark cloud can block both direct and diffuse sunlight. Shading on any part of an array can have a major impact without micro-inverters.
 
-Note that, the further away from South solar planes face, the more unreliable the forecast becomes. Planes that face north from direct east or west appear to be particularly unreliable at the start or end of the solar day.
+Note that, the further away from south a solar plane faces, the more unreliable the forecast becomes. Planes that face northerly from direct east or west appear to be particularly unreliable at the start or end of the solar day.
 
 </details>
 
