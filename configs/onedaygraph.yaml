@@ -1,0 +1,64 @@
+type: custom:apexcharts-card
+graph_span: 17h
+span:
+  end: day
+  offset: '-2h'
+header:
+  show: true
+  title: 'Solar Forecast: yesterday - today - tomorrow'
+now:
+  show: true
+  label: now
+show:
+  last_updated: true
+series:
+  - entity: sensor.fc_table
+    data_generator: |
+      return entity.attributes.fchours.map((fchr, index) => {
+        return [new Date(fchr).getTime(), entity.attributes.fcwatts[index]];
+      });
+    curve: straight
+    name: Forecast
+    show:
+      in_header: false
+      legend_value: false
+    stroke_width: 3
+    color: orange
+  - entity: sensor.fc_table
+    data_generator: |
+      return entity.attributes.fchours.map((fchr, index) => {
+        return [new Date(fchr).getTime(), entity.attributes.fcold[index]];
+      });
+    curve: straight
+    name: History
+    show:
+      in_header: false
+      legend_value: false
+    stroke_width: 3
+    color: magenta
+  - entity: sensor.fc_table
+    data_generator: |
+      return entity.attributes.fchours.map((fchr, index) => {
+        return [new Date(fchr).getTime(), entity.attributes.fcactual[index]];
+      });
+    type: column
+    curve: smooth
+    name: Actual
+    show:
+      in_header: false
+      legend_value: false
+    stroke_width: 1
+    color: blue
+  - entity: sensor.fc_table
+    data_generator: |
+      return entity.attributes.fchours.map((fchr, index) => {
+        return [new Date(fchr).getTime(), entity.attributes.fcwh[index]];
+      });
+    type: column
+    curve: straight
+    name: Energy
+    show:
+      in_header: false
+      legend_value: false
+    stroke_width: 1
+    color: green

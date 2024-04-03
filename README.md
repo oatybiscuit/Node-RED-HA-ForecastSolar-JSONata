@@ -18,6 +18,9 @@ A **Node-RED** flow to read, analyze and save into context variables **Forecast 
 >[!NOTE]
 > This uses my *personal* interpretation of the returned API data. I am not connected in any way with Forecast.Solar or the Home Assistant integration, and there are other interpretations for the details of the data returned from the API.
 
+>[!CAUTION]
+> This flow has been running on my Home Assistant (Node-RED addon) for two years, and every day I look at the daily graph to see how solar PV is performing against the forecast today, what the forecast looks like for tomorrow, and how it went yesterday. It very occasionally fails, but I find it a great tool for visually planning manual interventions for my home energy use. I don't use this information in automations as I find the accuracy can be out by more than +/- 20% too often. You are welcome to use this code as you wish, but it comes with absolutely no guarantees.
+
 ## What this Node-RED flow does
 
 <details>
@@ -380,7 +383,7 @@ The JSONata required here is:
         "P": power,
         "C": count,
         "S": (period.start)[0],
-        "E": (period.stop)[0],
+        "E": (period.stop)[-1],
         "M": $sum(period.minutes)};
 
     $pa[P>=$$.parms.Power and S>=$$.parms.Start and M>=$$.parms.Length].
