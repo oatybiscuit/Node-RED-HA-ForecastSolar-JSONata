@@ -5,7 +5,7 @@ span:
   offset: '-2h'
 header:
   show: true
-  title: 'Solar Forecast: yesterday - today - tomorrow'
+  title: 'Solar Forecast for Today'
 now:
   show: true
   label: now
