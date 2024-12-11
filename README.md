@@ -2,6 +2,9 @@
 
 Read Forecast.Solar **API** using Node-RED and JSONata for Home Assistant
 
+>[!WARNING]
+>As of December 2024 I am no longer supporting this code. I have been working with the in-built Forecast.Solar integration, directly in Home Assistant and via API calls, for over two years. After collecting and analyzing actual-to-forecast figures for 12 months, I have concluded that the accuracy (for me) is unacceptable and makes this forecast inappropriate for any practical use. This code will remain as an example of how to process API calls using JSONata.
+
 [![GitHub Release](https://img.shields.io/github/v/release/oatybiscuit/Node-RED-HA-ForecastSolar-JSONata)](https://github.com/oatybiscuit/Node-RED-HA-ForecastSolar-JSONata/releases)
 ![GitHub Downloads (all assets, latest release)](https://img.shields.io/github/downloads/oatybiscuit/Node-RED-HA-ForecastSolar-JSONata/latest/total)
 [![License: MIT](https://img.shields.io/github/license/oatybiscuit/Node-RED-HA-ForecastSolar-JSONata)](/LICENSE)
